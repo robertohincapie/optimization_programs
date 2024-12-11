@@ -3,24 +3,22 @@ from pulp import *
 import matplotlib.pyplot as plt
 plt.close('all')
 import numpy as np
-n=100
+from generacion_grafos import grafo
+
+n=200
 G=nx.DiGraph()
-x=np.random.uniform(low=-100,high=100,size=n)
-y=np.random.uniform(low=-100,high=100,size=n)
+x,y,edges=grafo(L=100, N=n, d=35)
 d_org=[np.sqrt((x[i]-100)**2+(y[i]-100)**2) for i in range(n)]
 s=np.argmin(d_org)
 t=np.argmax(d_org)
 
-d=35
 nodos={}
 dist=[]
 for i in range(n):
     nodos['N'+str(i)]=(x[i], y[i])
-for i in range(n-1):
-    for j in range(i+1, n):
-        dij=np.sqrt((x[i]-x[j])**2+(y[i]-y[j])**2)
-        if(dij<=d):
-            dist.append(('N'+str(i), 'N'+str(j), dij))
+for i,j in edges:
+    dij=np.sqrt((x[i]-x[j])**2+(y[i]-y[j])**2)
+    dist.append(('N'+str(i), 'N'+str(j), dij))
 
 for k,pos in nodos.items():
     G.add_node(k, pos=pos)
