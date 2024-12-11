@@ -1,2 +1,2 @@
 # optimization_programs
-Different optimization programs to support the course
+Diferentes programas de optimización como soporte del curso de optimizacion
