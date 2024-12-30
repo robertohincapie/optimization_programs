@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 plt.close('all')
 import numpy as np
 from generacion_grafos import grafo
-n=100
+n=200
 G=nx.Graph()
 L=100
 d=30
@@ -50,26 +50,29 @@ G.add_edge('G','SE3',weight=0.001, capacity=100*cap, uso=0)
 G.add_edge('G','SE4',weight=0.001, capacity=100*cap, uso=0)
 
 color_map = []
+color_index={}
 for node in G:
+    color_index[node]=len(color_map)
     if(node[0]=='G'):
         color_map.append('yellow')
     if(node[0]=='S'):
-        color_map.append('white')
+        color_map.append('#aaaaaa')
     if(node[0]=='N'):
-        color_map.append('cyan')
-    if(node[0]=='T'):
-        color_map.append('red')
+        color_map.append('#abe456')
     
 tree=nx.minimum_spanning_tree(G)
+colores=['#ccd1d1', '#f5cba7', '#a3e4d7', '#d2b4de', '#f5b7b1', '#f7dc6f']
 
 #Capacidad utilizada actual: 
 for i in range(n):
     nodo='N'+str(i)
     dem=demand[nodo]
     path=nx.shortest_path(tree, 'G', nodo)
+    SE=int(path[1][2])
+    color=colores[SE-1]
     for i in range(1,len(path)-1):
         tree.edges[path[i], path[i+1]]['uso']+=dem
-
+        color_map[color_index[path[i+1]]]=color
 width = [tree[u][v]['uso'] for u,v in tree.edges]
 Wmax=np.max(width)
 Wm=10
@@ -77,5 +80,5 @@ width=[w*(Wm-1)/Wmax+1 for w in width]
 
 post=nx.get_node_attributes(tree,'pos')
 plt.figure()
-nx.draw(tree,post, with_labels=True, font_size=8, node_size=100, node_color=color_map, width=width)
+nx.draw(tree,post, with_labels=True, font_size=8, node_size=200, node_color=color_map, width=width, edgecolors='black', alpha=0.8)
 plt.axis('equal')
