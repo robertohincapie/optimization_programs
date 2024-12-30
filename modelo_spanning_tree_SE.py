@@ -56,7 +56,7 @@ for node in G:
     if(node[0]=='G'):
         color_map.append('yellow')
     if(node[0]=='S'):
-        color_map.append('#aaaaaa')
+        color_map.append('yellow')
     if(node[0]=='N'):
         color_map.append('#abe456')
     
