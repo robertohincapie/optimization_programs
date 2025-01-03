@@ -11,49 +11,9 @@ import matplotlib.pyplot as plt
 plt.close('all')
 import numpy as np
 from generacion_grafos import grafo
-from funciones import guardarRed
+from funciones import leerRed, guardarRed
 
-n=200
-G=nx.Graph()
-L=100
-d=30
-x,y,edges=grafo(L=L, N=n, d=d)
-d_org=[np.sqrt((x[i]-100)**2+(y[i]-100)**2) for i in range(n)]
-s=np.argmin(d_org)
-t=np.argmax(d_org)
-nodos={}
-dist=[]
-demand={}
-for i in range(n):
-    nodos['N'+str(i)]=(x[i], y[i])
-    demand['N'+str(i)]=np.random.randint(low=1, high=5)
-
-for i,j in edges:
-    dij=np.sqrt((x[i]-x[j])**2+(y[i]-y[j])**2)
-    dist.append(('N'+str(i), 'N'+str(j), dij))
-
-cap=50
-for k,pos in nodos.items():
-    G.add_node(k, pos=pos, demanda=demand[k])
-for a,b,d in dist: 
-    G.add_edge(a,b,weight=d, capacity=cap, uso=0)
-    #G.add_edge(b,a,weight=d, capacity=cap)
-
-transmision={'G':(0.0,0.0)}
-pos=[(-L/2, -L/2), (L/2, -L/2), (-L/2, L/2), (L/2, L/2)]
-Nse=3
-for i in range(Nse): #Número de subestaciones
-   transmision['SE'+str(i+1)]=np.array(pos[i])+np.random.randn(2)*L/4
-   
-for k,pos in transmision.items():
-    G.add_node(k, pos=pos, demanda=0)
-    for k2,pos2 in nodos.items():
-        dist=np.sqrt((pos[0]-pos2[0])**2+(pos[1]-pos2[1])**2)
-        if(dist<2000*d and k!='G'):
-            G.add_edge(k2,k, weight=dist, uso=0, capacity=cap)            
-for i in range(Nse):
-    G.add_edge('G','SE'+str(i+1),weight=0.001, capacity=1000*cap, uso=0)
-
+G=leerRed('RedDistribucion.nx')
 
 def esau_williams(G):
     Tree=nx.Graph()
@@ -125,40 +85,10 @@ def esau_williams(G):
     for dic in no_conectados: 
         Tree.add_node(dic['k'], pos=G.nodes[n_in]['pos'], demanda=G.nodes[n_in]['demanda'])
     return Tree
-tree=nx.minimum_spanning_tree(G)
+
 colores=['#ccd1d1', '#f5cba7', '#a3e4d7', '#d2b4de', '#f5b7b1', '#f7dc6f']
-
-#Capacidad utilizada actual: 
-color_map = []
-for ni in tree.nodes:
-    if(ni[0]=='G'):
-        color_map.append('yellow')
-    if(ni[0]=='S'):
-        color_map.append('yellow')
-    if(ni[0]=='N'):
-        nodo=ni
-        dem=demand[nodo]
-        path=nx.shortest_path(tree, 'G', nodo)
-        SE=int(path[1][2])
-        color=colores[SE-1]
-        for i in range(1,len(path)-1):
-            tree.edges[path[i], path[i+1]]['uso']+=dem
-        color_map.append(color)
-
-width = [tree[u][v]['uso'] for u,v in tree.edges]
-Wmax=np.max(width)
-Wm=10
-width=[w*(Wm-1)/Wmax+1 for w in width]
-
-#post=nx.get_node_attributes(tree,'pos')
-#plt.figure()
-#nx.draw(tree,post, with_labels=True, font_size=8, node_size=200, node_color=color_map, width=width, edgecolors='black', alpha=0.8)
-#plt.axis('equal')
-
-
-Tree=esau_williams(G)
+Tree=G.copy()
 post=nx.get_node_attributes(Tree,'pos')
-
 width = [Tree[u][v]['uso'] for u,v in Tree.edges]
 Wmax=np.max(width)
 Wm=10
@@ -182,4 +112,42 @@ edgeLbl={(u,v):Tree.edges[u,v]['uso'] for u,v in Tree.edges}
 nx.draw_networkx_edge_labels(Tree, post, edgeLbl, font_size=6)
 
 plt.axis('equal')
-guardarRed(Tree, 'RedDistribucion.nx')
+
+G.add_node('SE4',pos=(50,50), demanda=0)
+G.add_edge('SE4','G',weight=0.001, capacity=50000, uso=0)
+for ni in G.nodes:
+    if(ni[0]=='N'):
+        dist=np.linalg.norm(np.array(G.nodes['SE4']['pos'])-np.array(G.nodes[ni]['pos']))
+        if(dist<50):
+            G.add_edge('SE4',ni, weight=dist, capacity=50, uso=0)
+
+Tree=esau_williams(G)
+
+post=nx.get_node_attributes(Tree,'pos')
+width = [Tree[u][v]['uso'] for u,v in Tree.edges]
+Wmax=np.max(width)
+Wm=10
+width=[w*(Wm-1)/Wmax+1 for w in width]
+
+color_map=[]
+for ni in Tree.nodes:
+    if(ni[0]=='G'):
+        color_map.append('yellow')
+    if(ni[0]=='S'):
+        color_map.append('yellow')
+    if(ni[0]=='N'):
+        path=nx.shortest_path(Tree, 'G', ni)
+        SE=int(path[1][2])
+        color=colores[SE-1]
+        color_map.append(color)
+
+plt.figure()
+nx.draw(Tree,post, with_labels=True, font_size=8, node_size=200, node_color=color_map,  width=width, edgecolors='black', alpha=0.8)
+edgeLbl={(u,v):Tree.edges[u,v]['uso'] for u,v in Tree.edges}
+nx.draw_networkx_edge_labels(Tree, post, edgeLbl, font_size=6)
+
+plt.axis('equal')
+
+
+#Ahora agregaremos varios nodos aleatorios nuevos al sistema. 
+
