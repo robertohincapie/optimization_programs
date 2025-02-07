@@ -55,7 +55,11 @@ for a,b in G.edges:
     
 prob += tmp, "Función objetivo"
 
+print(prob)
+
 #Solución del problema
+print('--------------------------------')     
+print('Solución del problema')
 prob.solve()
 for v in prob.variables():
     if(v.varValue>0):
@@ -64,4 +68,4 @@ for v in prob.variables():
         x1, y1=G.nodes[a]['pos']
         x2, y2=G.nodes[b]['pos']
         plt.plot([x1,x2],[y1,y2],'-r',linewidth=3)
-        
+print('--------------------------------')       

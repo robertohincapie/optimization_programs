@@ -15,6 +15,7 @@ def grafo(L,N,d):
             di=np.sqrt((x[i]-x[j])**2+(y[i]-y[j])**2)
             if(di<=d):
                 links.append((i,j))
+                links.append((j,i))
     
     G=nx.Graph()
     for i in range(N):
