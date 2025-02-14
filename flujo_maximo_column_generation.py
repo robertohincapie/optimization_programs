@@ -4,9 +4,9 @@ import matplotlib.pyplot as plt
 plt.close('all')
 import numpy as np
 from funciones import grafo, dibujarRed
-n=200
+n=50
 G=nx.DiGraph()
-x,y,edges=grafo(L=100, N=n, d=30)
+x,y,edges=grafo(L=100, N=n, d=60)
 d_org=[np.sqrt((x[i]-100)**2+(y[i]-100)**2) for i in range(n)]
 s=np.argmin(d_org)
 t=np.argmax(d_org)
@@ -24,6 +24,7 @@ cap=10
 for k,pos in nodos.items():
     G.add_node(k, x=pos[0], y=pos[1])
 for a,b,d in dist: 
+    cap=np.random.randint(low=5, high=10)
     G.add_edge(a,b,weight=d, capacity=cap)
     G.add_edge(b,a,weight=d, capacity=cap)
     
@@ -39,7 +40,7 @@ def camino_incluye_enlace(camino, a, b):
     return False
 
 condicion=True #Vamos a considerar que podemos continuar mejorando el problema
-cont=4
+cont=400
 while(condicion and cont>=0):
     cont-=1
     plt.figure()
@@ -98,6 +99,7 @@ while(condicion and cont>=0):
             _,par=v.name.split('_')
             a,b=par.split(',')
             G2.remove_edge(int(a), int(b))
+            plt.plot([x[int(a)], x[int(b)]], [y[int(a)], y[int(b)]], '-g', linewidth=5)
     if(nx.has_path(G2, s,t)):
         #Hay camino posible:
         condicion=True
