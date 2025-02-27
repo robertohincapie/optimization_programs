@@ -17,7 +17,7 @@ for i in range(n):
         a,b='Recurso'+str(i), 'Persona'+str(j)
         afinidad[a,b]=np.random.rand()
 
-prob = LpProblem("Problema_asignacion", LpMinimize)
+prob = LpProblem("Problema_asignacion", LpMaximize)
 x={}
 for i in range(n):
     for j in range(n): 

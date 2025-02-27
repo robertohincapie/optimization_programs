@@ -5,9 +5,10 @@ plt.close('all')
 import numpy as np
 from funciones import grafo
 
-n=200
+n=50
 G=nx.DiGraph()
 x,y,edges=grafo(L=100, N=n, d=15)
+
 d_org=[np.sqrt((x[i]-100)**2+(y[i]-100)**2) for i in range(n)]
 s=np.argmin(d_org)
 t=np.argmax(d_org)
