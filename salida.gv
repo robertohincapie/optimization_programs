@@ -1,0 +1,43 @@
+digraph G {
+    mvqsjlqsgi [shape=box, style=filled, fillcolor=lightgreen, color=black, label="Problema_original:
+MAXIMIZE
+3*x + 2*y + 0
+SUBJECT TO
+Restricción_0: x <= 5.5
+
+Restricción_1: y <= 16.5
+
+Restricción_2: x + y <= 10
+
+Restricción_3: x - 3 y <= 4
+
+VARIABLES
+x <= 1000 Continuous
+y <= 1000 Continuous
+
+Solución del problema
+Obj=25.5
+x=5.5
+y=4.5"];
+    wgmvtmksqx [shape=box, style=filled, fillcolor=lightgreen, color=black, label="y <= 4.0
+Solución del problema
+Obj=24.5
+x=5.5
+y(*)=4.0"];
+    fcidgavfxf [shape=box, style=filled, fillcolor=steelblue1, color=black, label="y >= 5.0
+Solución del problema
+Obj=25.0
+x(*)=5.0
+y(*)=5.0"];
+    ejjkbjeyfv [shape=box, style=filled, fillcolor=steelblue1, color=black, label="x <= 5.0
+Solución del problema
+Obj=23.0
+x(*)=5.0
+y(*)=4.0"];
+    lmcevcyqeo [shape=box, style=filled, fillcolor=lightcoral, color=black, label="x >= 6.0
+El problema no es factible"];
+mvqsjlqsgi->wgmvtmksqx;
+mvqsjlqsgi->fcidgavfxf;
+wgmvtmksqx->ejjkbjeyfv;
+wgmvtmksqx->lmcevcyqeo;
+}
