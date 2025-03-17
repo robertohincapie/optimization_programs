@@ -10,7 +10,7 @@ from pulp import *
 import matplotlib.pyplot as plt
 plt.close('all')
 import numpy as np
-from generacion_grafos import grafo
+from funciones import grafo
 from funciones import guardarRed
 
 n=200

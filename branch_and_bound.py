@@ -86,7 +86,7 @@ obj1=2*x+5*y
 restricciones2=[x<=5.5, y<=16.5, x+y<=10, x-3*y<=4]
 obj2=3*x+2*y
 
-nodos=[nodo([x,y], restricciones2, obj2)]
+nodos=[nodo([x,y], restricciones1, obj1)]
 cont=10
 while(cont>=0 and not(all([ni.procesado for ni in nodos]))):
     cont-=1
