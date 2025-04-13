@@ -11,6 +11,9 @@ plt.close('all')
 #problema de asignación de sitios de atención de fallas
 M=25 #Puntos disponibles para atención de fallas
 N=200 #Puntos de atención de fallas
+
+#M=200 #Puntos disponibles para atención de fallas
+#N=8000 #Puntos de atención de fallas
 L=10000
 rf=np.random.uniform(-L, L, size=(N,2))
 ri=np.random.uniform(-L, L, size=(M,2))
@@ -59,7 +62,7 @@ def solucion(used, d, ri, rf):
 
 dm=np.min(d)+1000
 num=20
-Nmax=5
+Nmax=8
 while(num>Nmax):
     alfa=getAlfa(d,dm)
     num, pr, used=setcover(alfa)

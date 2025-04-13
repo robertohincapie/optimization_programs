@@ -62,7 +62,7 @@ def problema_activacion(disponibles, d, N):
         alfa=getAlfa(d2,dm)
         used2, covered2=setcover(alfa)
         pr2=len(covered2)/len(d2[0])
-        #print(pr2, len(used2))
+        print(pr2, len(used2))
         if(pr2>=1):
             num=len(used2)
             used=used2            
