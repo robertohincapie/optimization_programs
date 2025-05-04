@@ -160,7 +160,7 @@ dibujar(x,y,demanda,links)
 
 for i,dem in demanda.items():
   plt.plot(x[i],y[i],'sb', markersize=dem)
-plt.plot(x[pos], y[pos], '*r', markersize=10)
+plt.plot(x[pos], y[pos], '*r', markersize=30)
 
 for ca in bestCar:
   xp=[x[i] for i in ca]
